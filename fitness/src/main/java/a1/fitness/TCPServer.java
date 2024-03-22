@@ -6,7 +6,9 @@ package a1.fitness;
 
 /**
  *
- * @author Sera Jeong 12211242
+ * @author sera jeong 12211242
+ * COIT13229 assignment 1
+ * 
  */
 
 import java.net.*;
@@ -15,7 +17,7 @@ import java.io.*;
 
 public class TCPServer {
     private static final int PORT = 1142;
-    private static final String MEMBER_LIST_FILE = "memberlist.txt";
+    private static final String memberList = "memberlist.txt";
 
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
@@ -64,11 +66,12 @@ public class TCPServer {
     }
 
     private static void saveMemberDetails(String firstName, String lastName, String address, String phone) {
-        try (FileOutputStream fos = new FileOutputStream(MEMBER_LIST_FILE, true)) {
+        try (FileOutputStream fos = new FileOutputStream(memberList, true)) {
             String details = firstName + ", " + lastName + ", " + address + ", " + phone + "\n";
             fos.write(details.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+      
 }

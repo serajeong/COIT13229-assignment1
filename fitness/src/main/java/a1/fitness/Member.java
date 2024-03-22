@@ -6,7 +6,9 @@ package a1.fitness;
 
 /**
  *
- * @author seren
+ * @author sera jeong 12211242
+ * COIT13229 assignment 1
+ * 
  */
 public class Member {
     private String firstName;

@@ -6,7 +6,9 @@ package a1.fitness;
 
 /**
  *
- * @author Sera Jeong 12211242
+ * @author sera jeong 12211242
+ * COIT13229 assignment 1
+ * 
  */
 
 public class UDPClient {
