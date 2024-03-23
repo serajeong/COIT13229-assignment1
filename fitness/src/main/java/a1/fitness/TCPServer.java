@@ -13,10 +13,11 @@ package a1.fitness;
 
 import java.net.*;
 import java.io.*;
+import a1.fitness.Member;
 
 
 public class TCPServer {
-    private static final int PORT = 1142;
+    private static final int portNo = 1142;
     private static final String memberList = "memberlist.txt";
 
     public static void main(String[] args) {
@@ -24,31 +25,31 @@ public class TCPServer {
 
         try {
             // Create a server socket
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(portNo);
             System.out.println("Receiving data from client: ");
 
             while (true) {
-                // Wait for client connections
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected: " + clientSocket);
 
-                // Create input and output streams for communication
                 DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
                 DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 
-                // Receive member details from client
-                String firstName = dis.readUTF();
-                String lastName = dis.readUTF();
-                String address = dis.readUTF();
-                String phone = dis.readUTF();
+                //receive member details from client
+                Member member = receiveMemberDetails(dis);
+//                String firstName = dis.readUTF();
+//                String lastName = dis.readUTF();
+//                String address = dis.readUTF();
+//                String phone = dis.readUTF();
 
-                // Save member details to file
-                saveMemberDetails(firstName, lastName, address, phone);
+                //save member details to txt file
+                saveMemberDetails(member);
 
-                // Send feedback to client
+                //send feedback to client
                 dos.writeUTF("Save Data of the member number:");
+                dos.flush();
+                
 
-                // Close streams and socket
                 dis.close();
                 dos.close();
                 clientSocket.close();
@@ -63,15 +64,24 @@ public class TCPServer {
                 e.printStackTrace();
             }
         }
+
+    }
+    //receive member details
+    private static Member receiveMemberDetails(DataInputStream dis) throws IOException {
+        String firstName = dis.readUTF();
+        String lastName = dis.readUTF();
+        String address = dis.readUTF();
+        String phone = dis.readUTF();
+        return new Member(firstName, lastName, address, phone);
     }
 
-    private static void saveMemberDetails(String firstName, String lastName, String address, String phone) {
+    // Method to save member details to a file
+    private static void saveMemberDetails(Member member) {
         try (FileOutputStream fos = new FileOutputStream(memberList, true)) {
-            String details = firstName + ", " + lastName + ", " + address + ", " + phone + "\n";
+            String details = member.getFirstName() + ", " + member.getLastName() + ", " + member.getAddress() + ", " + member.getPhone() + "\n";
             fos.write(details.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-      
 }

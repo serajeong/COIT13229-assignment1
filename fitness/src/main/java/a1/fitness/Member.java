@@ -4,17 +4,20 @@
  */
 package a1.fitness;
 
+import java.io.Serializable;
+
 /**
  *
  * @author sera jeong 12211242
  * COIT13229 assignment 1
  * 
  */
-public class Member {
+public class Member implements Serializable{
     private String firstName;
     private String lastName;
     private String address;
     private String phone;
+
 
     //constructor
     public Member(String firstName, String lastName, String address, String phone) {
@@ -56,9 +59,7 @@ public class Member {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
-    
-    
+        
 }
 
 
