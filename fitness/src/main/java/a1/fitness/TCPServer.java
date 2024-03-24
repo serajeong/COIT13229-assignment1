@@ -13,75 +13,122 @@ package a1.fitness;
 
 import java.net.*;
 import java.io.*;
+import java.util.*;
 import a1.fitness.Member;
+import java.nio.file.Files;
 
 
 public class TCPServer {
-    private static final int portNo = 1142;
-    private static final String memberList = "memberlist.txt";
+    private static final int PORT_NO = 1142;
+    private static final String FILE_MEMBER_LIST = "memberlist.txt";
+    private static final String FILE_MEMBER_OBJECT = "memberlistObject.txt";
 
-    public static void main(String[] args) {
-        ServerSocket serverSocket = null;
+    public static void main(String[] args) throws IOException {
+        
+        
+        //timer for saving member list objects
+        TimerTask task = new TimerTask(){
+            public void run(){
+                byte[] byteFile = null;
+                try{
+                    File file1 = new File(FILE_MEMBER_LIST);
+                    
+                    //server convers memberlist to memberobject if memberlist file exists
+                    if (file1.exists()){
+                        byteFile = Files.readAllBytes(file1.toPath());
+                        
+                            try(FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT,true)){
+                                fos.write(byteFile);
+                            }catch(IOException e){
+                            }   
+                        }
+                    } catch (IOException e1){
+                        e1.printStackTrace();
+                    }
+                }
+            };
+            Timer timer = new Timer("Timer");
+            long delay = 0;
+            long period = 2000; //2 seconds as required
+            timer.scheduleAtFixedRate(task, delay, period);
 
-        try {
+
+
             // Create a server socket
-            serverSocket = new ServerSocket(portNo);
+            ServerSocket serverSocket = new ServerSocket(PORT_NO);
             System.out.println("Receiving data from client: ");
 
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Client connected: " + clientSocket);
 
-                DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
-                DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected: " + socket);
 
-                //receive member details from client
-                Member member = receiveMemberDetails(dis);
-//                String firstName = dis.readUTF();
-//                String lastName = dis.readUTF();
-//                String address = dis.readUTF();
-//                String phone = dis.readUTF();
+            InputStream in = socket.getInputStream();
+            DataInputStream dis = new DataInputStream(in);
+            OutputStream out = socket.getOutputStream();
+            DataOutputStream dos = new DataOutputStream(out);
 
-                //save member details to txt file
-                saveMemberDetails(member);
 
-                //send feedback to client
-                dos.writeUTF("Save Data of the member number:");
-                dos.flush();
+                while(true) {
+                    InputStream is = socket.getInputStream();
+                    byte[] bytes = new byte[1024];
+
+                    int readByteCount = is.read(bytes);
+                    //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
+                    System.out.println("readByteCount" + readByteCount);
+
+                    if (readByteCount > 0){
+
+                        //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
+                        System.out.println("Received data from Client");
+
+                        Member receiveMember = toObject(bytes, Member.class);
+                        saveMemberList(receiveMember);
+                        sendData(bytes, socket);
+                    } else {
+                        //closing
+                        in.close();
+                        out.close();
+                        socket.close();
+                        serverSocket.close();
+                        break;
+                    }
+                }
+    }
+
                 
-
-                dis.close();
-                dos.close();
-                clientSocket.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (serverSocket != null)
-                    serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-    //receive member details
-    private static Member receiveMemberDetails(DataInputStream dis) throws IOException {
-        String firstName = dis.readUTF();
-        String lastName = dis.readUTF();
-        String address = dis.readUTF();
-        String phone = dis.readUTF();
-        return new Member(firstName, lastName, address, phone);
-    }
-
-    // Method to save member details to a file
-    private static void saveMemberDetails(Member member) {
-        try (FileOutputStream fos = new FileOutputStream(memberList, true)) {
-            String details = member.getFirstName() + ", " + member.getLastName() + ", " + member.getAddress() + ", " + member.getPhone() + "\n";
+    // save member details to a file
+    private static void saveMemberList(Member member) {
+        try (FileOutputStream fos = new FileOutputStream(FILE_MEMBER_LIST, true)) {
+            String details = member.getFirstName() + ":" + member.getLastName() + ":" + member.getAddress() + ":" + member.getPhone() + "\n";
             fos.write(details.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    //byte to object
+    public static <T> T toObject(byte[] bytes, Class<T> type){
+        Object obj = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream (bis);
+            obj = ois.readObject();
+        } catch (IOException ex){
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+        }
+        return type.cast(obj);
+    }
+    
+    public static void sendData(byte[] bytes, Socket socket){
+        try{
+            OutputStream os = socket.getOutputStream();
+            os.write(bytes);
+            os.flush();            
+        } catch(Exception e1){
+            e1.printStackTrace();
+        }
+    }
+    
 }
