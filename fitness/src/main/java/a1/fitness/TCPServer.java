@@ -8,7 +8,7 @@ package a1.fitness;
  *
  * @author sera jeong 12211242
  * COIT13229 assignment 1
- * 
+ * TCP connection 11xx = 1142 (because student number ends with 42)
  */
 
 import java.net.*;
@@ -24,8 +24,7 @@ public class TCPServer {
     private static final String FILE_MEMBER_OBJECT = "memberlistObject.txt";
 
     public static void main(String[] args) throws IOException {
-        
-        
+       
         //timer for saving member list objects
         TimerTask task = new TimerTask(){
             public void run(){
@@ -33,11 +32,12 @@ public class TCPServer {
                 try{
                     File file1 = new File(FILE_MEMBER_LIST);
                     
-                    //server convers memberlist to memberobject if memberlist file exists
+                    //server converts memberlist to memberobject if memberlist file exists
                     if (file1.exists()){
                         byteFile = Files.readAllBytes(file1.toPath());
                         
-                            try(FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT,true)){
+                            //TESTING with 'false' which rewrites object file every 2 seconds instead of 'true' that appends
+                            try(FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT,false)){
                                 fos.write(byteFile);
                             }catch(IOException e){
                             }   
@@ -52,12 +52,9 @@ public class TCPServer {
             long period = 2000; //2 seconds as required
             timer.scheduleAtFixedRate(task, delay, period);
 
-
-
-            // Create a server socket
+            //create a server socket
             ServerSocket serverSocket = new ServerSocket(PORT_NO);
             System.out.println("Receiving data from client: ");
-
 
             Socket socket = serverSocket.accept();
             System.out.println("Client connected: " + socket);
@@ -66,7 +63,6 @@ public class TCPServer {
             DataInputStream dis = new DataInputStream(in);
             OutputStream out = socket.getOutputStream();
             DataOutputStream dos = new DataOutputStream(out);
-
 
                 while(true) {
                     InputStream is = socket.getInputStream();
@@ -92,11 +88,12 @@ public class TCPServer {
                         serverSocket.close();
                         break;
                     }
+                    //send feedback to client
+                    dos.writeUTF("Save Data of the member number:");
                 }
     }
-
                 
-    // save member details to a file
+    //save member details to a file
     private static void saveMemberList(Member member) {
         try (FileOutputStream fos = new FileOutputStream(FILE_MEMBER_LIST, true)) {
             String details = member.getFirstName() + ":" + member.getLastName() + ":" + member.getAddress() + ":" + member.getPhone() + "\n";

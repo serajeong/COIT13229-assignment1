@@ -8,7 +8,7 @@ package a1.fitness;
  *
  * @author sera jeong 12211242
  * COIT13229 assignment 1
- * 
+ * TCP connection 11xx = 1142 (because student number ends with 42)
  */
 
 import java.net.*;
@@ -32,6 +32,7 @@ public class TCPClient {
         int maxBufferSize = 1024;
         
         while(true){
+            //ask user to enter details for members
             System.out.println("Enter your First Name:");
             String firstName = scanner.nextLine();
             System.out.println("Enter your Last Name:");
@@ -49,14 +50,19 @@ public class TCPClient {
             //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
             System.out.println("data " + data);
             
+           
             dos.write(data);
             dos.flush();
             byte[] recvBuffer = new byte[maxBufferSize];
             InputStream is = socket.getInputStream();
             int nReadSize = is.read(recvBuffer);
             
-        
-            System.out.println("Would you like to enter details for another member? Please type 'yes', if you do want to add details for multiple members now.");
+            //receive feedback from server
+            String feedback = dis.readUTF();
+            System.out.println("Server response: " + feedback);
+            
+            //ask member if they want to add more member
+            System.out.println("Would you like to enter more member details? Please type 'no' to exit, otherwise it will continue.");
             String endFlag = scanner.nextLine();
 
             if("no".equals(endFlag.toLowerCase())){
@@ -84,7 +90,6 @@ public class TCPClient {
     }
     
     //object to byte
-    
     public static byte[] toByteArray (Object obj) {
     	byte[] bytes = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
