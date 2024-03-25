@@ -1,1 +1,7 @@
 /fitness/target/
+/13229week3/target/
+13229week3/pom.xml
+13229week3/src/main/java/week3/App.java
+13229week3/src/main/java/week3/MultipleTread.java
+13229week3/src/main/java/week3/RunnableInterface.java
+13229week3/src/main/java/week3/ThreadExtension.java
