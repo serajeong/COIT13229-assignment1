@@ -21,30 +21,31 @@ import java.nio.file.Files;
 public class TCPServer {
     private static final int PORT_NO = 1142;
     private static final String FILE_MEMBER_LIST = "memberlist.txt";
-    private static final String FILE_MEMBER_OBJECT = "memberlistObject.txt";
+    private static final String FILE_MEMBER_OBJECT = "memberlistObject";
 
     public static void main(String[] args) throws IOException {
        
         //timer for saving member list objects
         TimerTask task = new TimerTask(){
             public void run(){
-                byte[] byteFile = null;
-                try{
-                    File file1 = new File(FILE_MEMBER_LIST);
-                    
-                    //server converts memberlist to memberobject if memberlist file exists
-                    if (file1.exists()){
-                        byteFile = Files.readAllBytes(file1.toPath());
-                        
-                            //TESTING with 'false' which rewrites object file every 2 seconds instead of 'true' that appends
-                            try(FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT,false)){
-                                fos.write(byteFile);
-                            }catch(IOException e){
-                            }   
-                        }
-                    } catch (IOException e1){
-                        e1.printStackTrace();
-                    }
+                saveMemberObject();
+//                byte[] byteFile = null;
+//                try{
+//                    File file1 = new File(FILE_MEMBER_LIST);
+//                    
+//                    //server converts memberlist to memberobject if memberlist file exists
+//                    if (file1.exists()){
+//                        byteFile = Files.readAllBytes(file1.toPath());
+//                        
+//                            //TESTING with 'false' which rewrites object file every 2 seconds instead of 'true' that appends
+//                            try(FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT,false)){
+//                                fos.write(byteFile);
+//                            }catch(IOException e){
+//                            }   
+//                        }
+//                    } catch (IOException e1){
+//                        e1.printStackTrace();
+//                    }
                 }
             };
             Timer timer = new Timer("Timer");
@@ -92,7 +93,8 @@ public class TCPServer {
                     dos.writeUTF("Save Data of the member number:");
                 }
     }
-                
+    
+//    Thread thread = new Thread(new Runnable(){            
     //save member details to a file
     private static void saveMemberList(Member member) {
         try (FileOutputStream fos = new FileOutputStream(FILE_MEMBER_LIST, true)) {
@@ -102,7 +104,24 @@ public class TCPServer {
             e.printStackTrace();
         }
     }
-
+    // Save member objects to an object file
+    private static void saveMemberObject() {
+        try (FileInputStream fis = new FileInputStream(FILE_MEMBER_LIST);
+             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+             FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            // Read each line from the text file, parse it into a Member object, and write it to the object file
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(":");
+                Member member = new Member(parts[0], parts[1], parts[2], parts[3]); // Assuming Member constructor takes these parameters
+                oos.writeObject(member);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     //byte to object
     public static <T> T toObject(byte[] bytes, Class<T> type){
         Object obj = null;

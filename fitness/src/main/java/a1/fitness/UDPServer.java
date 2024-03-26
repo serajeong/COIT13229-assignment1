@@ -9,7 +9,15 @@ package a1.fitness;
  * COIT13229 assignment 1
  * UDP connection 22xx = 2242 (because student number ends with 42)
  */
+import java.net.*;
+import java.io.*;
 
 public class UDPServer {
-    
+    private static final int PORT_NO = 2242;    
+    private static final String FILE_NAME = "memberlistObject";
+
+    public static void main(String[] args) {
+        
+    }
+
 }

@@ -15,5 +15,12 @@ import java.net.*;
 import java.io.*;
 
 public class UDPClient {
+    private static final String SERVER_ADDRESS = "localhost";
+    private static final int PORT_NO = 2242;    
     
+    public static void main(String[] args) {
+        
+    }
+ 
+ 
 }
