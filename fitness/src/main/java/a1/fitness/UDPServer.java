@@ -36,6 +36,10 @@ public class UDPServer {
              FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
              Member member = (Member) objectInputStream.readObject();
+             System.out.println("First name :"  + member.getFirstName());
+             System.out.println("Last name :"  + member.getLastName());
+             System.out.println("Address size :"  + member.getAddress());
+             System.out.println("Phone :"  + member.getPhone());             
              objectInputStream.close();
 
             //send resdponse to client
