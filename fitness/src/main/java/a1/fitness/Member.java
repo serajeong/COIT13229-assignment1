@@ -13,6 +13,9 @@ import java.io.Serializable;
  * 
  */
 public class Member implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
+       
     private String firstName;
     private String lastName;
     private String address;
@@ -59,7 +62,11 @@ public class Member implements Serializable{
     public void setPhone(String phone) {
         this.phone = phone;
     }
-        
+    
+    @Override    
+    public String toString() {
+	return firstName +  "," + lastName + "," + address + ","  + phone;
+    }
 }
 
 

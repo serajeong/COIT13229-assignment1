@@ -13,14 +13,35 @@ package a1.fitness;
 
 import java.net.*;
 import java.io.*;
+import a1.fitness.Member;
 
 public class UDPClient {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int PORT_NO = 2242;    
     
     public static void main(String[] args) {
-        
+        try {
+            DatagramSocket serverSocket = new DatagramSocket();
+
+            byte[] requestData = "Requesting memberlistObject file".getBytes();
+
+            //make request and send to server
+            DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length, InetAddress.getByName(SERVER_ADDRESS), PORT_NO);
+
+            serverSocket.send(requestPacket);
+            System.out.println("Request sent to server.");
+
+            //receive response from server
+            byte[] responseData = new byte[1024];
+            DatagramPacket responsePacket = new DatagramPacket(responseData, responseData.length);
+            serverSocket.receive(responsePacket);
+
+            String response = new String(responsePacket.getData(), 0, responsePacket.getLength());
+            System.out.println("Response from server: " + response);
+
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
- 
- 
 }

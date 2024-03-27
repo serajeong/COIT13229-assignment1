@@ -104,7 +104,7 @@ public class TCPServer {
             e.printStackTrace();
         }
     }
-    // Save member objects to an object file
+    //save member objects to an object file
     private static void saveMemberObject() {
         try (FileInputStream fis = new FileInputStream(FILE_MEMBER_LIST);
              BufferedReader br = new BufferedReader(new InputStreamReader(fis));
