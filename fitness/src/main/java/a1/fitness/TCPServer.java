@@ -53,7 +53,7 @@ public class TCPServer {
             };
             Timer timer = new Timer("Timer");
             long delay = 0;
-            long period = 2000; //2 seconds as required
+            long period = 2000; //every 2 seconds as required
             timer.scheduleAtFixedRate(task, delay, period);
 
             //create a server socket
@@ -61,7 +61,7 @@ public class TCPServer {
             System.out.println("Receiving data from client: ");
 
             Socket socket = serverSocket.accept();
-            System.out.println("Client connected: " + socket);
+//            System.out.println("Client connected: " + socket);
 
             InputStream in = socket.getInputStream();
             DataInputStream dis = new DataInputStream(in);
@@ -73,13 +73,13 @@ public class TCPServer {
                     byte[] bytes = new byte[1024];
 
                     int readByteCount = is.read(bytes);
-                    //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
-                    System.out.println("readByteCount" + readByteCount);
+//                    //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
+//                    System.out.println("readByteCount" + readByteCount);
 
                     if (readByteCount > 0){
 
-                        //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
-                        System.out.println("Received data from Client");
+//                        //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
+//                        System.out.println("Received data from Client");
 
                         Member receiveMember = toObject(bytes, Member.class);
                         saveMemberList(receiveMember);
@@ -98,7 +98,7 @@ public class TCPServer {
     }
     
 //    Thread thread = new Thread(new Runnable(){            
-    //save member details to a file
+    //save member details as text file
     private static void saveMemberList(Member member) {
         try (FileOutputStream fos = new FileOutputStream(FILE_MEMBER_LIST, true)) {
             String details = member.getFirstName() + ":" + member.getLastName() + ":" + member.getAddress() + ":" + member.getPhone() + "\n";
@@ -107,17 +107,17 @@ public class TCPServer {
             e.printStackTrace();
         }
     }
-    //save member objects to an object file
+    //save member objects as object file
     private static void saveMemberObject() {
         try (FileInputStream fis = new FileInputStream(FILE_MEMBER_LIST);
              BufferedReader br = new BufferedReader(new InputStreamReader(fis));
              FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            //read each line from the text file, convert them to member object, and write object file
+            //read text file, convert into member object and write object file
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(":");
-                Member member = new Member(parts[0], parts[1], parts[2], parts[3]); // Assuming Member constructor takes these parameters
+                Member member = new Member(parts[0], parts[1], parts[2], parts[3]); //considering Member has 4 parameters
                 oos.writeObject(member);
             }
         } catch (IOException e) {

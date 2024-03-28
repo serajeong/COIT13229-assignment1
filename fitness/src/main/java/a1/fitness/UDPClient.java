@@ -23,14 +23,14 @@ public class UDPClient {
         try {
             DatagramSocket serverSocket = new DatagramSocket();
 
-            byte[] requestData = "Requesting memberlistObject file".getBytes();
+            byte[] requestData = "memberlistObject".getBytes();
 
             //make request and send to server
             DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length, InetAddress.getByName(SERVER_ADDRESS), PORT_NO);
 
             serverSocket.send(requestPacket);
-            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING            
-            System.out.println("Request sent to server.");
+//            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING            
+//            System.out.println("Request sent to server.");
 
             //receive response from server
             byte[] responseData = new byte[1024];
@@ -38,8 +38,10 @@ public class UDPClient {
             serverSocket.receive(responsePacket);
 
             String response = new String(responsePacket.getData(), 0, responsePacket.getLength());
-            System.out.println("TESTING // CHANGE HEADINGS FOR THE TABLE");
-            System.out.println("========================================"); 
+            System.out.println("Server Response:");
+            //display member details in table format
+            System.out.println("|First Name  |Last Name  |Address       |Phone Number  |");
+            System.out.println("========================================================"); 
             System.out.println(response);
 
             serverSocket.close();

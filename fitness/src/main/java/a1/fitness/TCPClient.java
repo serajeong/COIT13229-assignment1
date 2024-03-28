@@ -47,10 +47,9 @@ public class TCPClient {
             System.out.println(msg);
 
             byte[] data = toByteArray(member);
-            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
-            System.out.println("data " + data);
+//            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
+//            System.out.println("data " + data);
             
-           
             dos.write(data);
             dos.flush();
             byte[] recvBuffer = new byte[maxBufferSize];
@@ -64,11 +63,13 @@ public class TCPClient {
             //ask member if they want to add more member
             System.out.println("Would you like to enter more member details? Please type 'no' to exit, otherwise it will continue.");
             String endFlag = scanner.nextLine();
-
+            
+            //only break if user decides to exit by typing 'no' as prompted in message
             if("no".equals(endFlag.toLowerCase())){
                 break;
             }
         }
+        //closing
         dos.close();
         dis.close();
         in.close();
