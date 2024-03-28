@@ -110,7 +110,7 @@ public class TCPServer {
              BufferedReader br = new BufferedReader(new InputStreamReader(fis));
              FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            // Read each line from the text file, parse it into a Member object, and write it to the object file
+            //read each line from the text file, convert them to member object, and write object file
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(":");

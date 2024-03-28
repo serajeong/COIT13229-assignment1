@@ -29,6 +29,7 @@ public class UDPClient {
             DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length, InetAddress.getByName(SERVER_ADDRESS), PORT_NO);
 
             serverSocket.send(requestPacket);
+            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING            
             System.out.println("Request sent to server.");
 
             //receive response from server
@@ -37,7 +38,9 @@ public class UDPClient {
             serverSocket.receive(responsePacket);
 
             String response = new String(responsePacket.getData(), 0, responsePacket.getLength());
-            System.out.println("Response from server: " + response);
+            System.out.println("TESTING // CHANGE HEADINGS FOR THE TABLE");
+            System.out.println("========================================"); 
+            System.out.println(response);
 
             serverSocket.close();
         } catch (IOException e) {
