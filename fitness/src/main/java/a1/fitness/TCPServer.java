@@ -28,7 +28,10 @@ public class TCPServer {
         //timer for saving member list objects
         TimerTask task = new TimerTask(){
             public void run(){
-                saveMemberObject();
+                if (new File(FILE_MEMBER_LIST).exists()){
+                saveMemberObject();                    
+                }
+
 //                byte[] byteFile = null;
 //                try{
 //                    File file1 = new File(FILE_MEMBER_LIST);
