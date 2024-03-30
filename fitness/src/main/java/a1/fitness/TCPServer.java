@@ -5,7 +5,7 @@
 package a1.fitness;
 
 /**
- *
+
  * @author sera jeong 12211242
  * COIT13229 assignment 1
  * TCP connection 11xx = 1142 (because student number ends with 42)

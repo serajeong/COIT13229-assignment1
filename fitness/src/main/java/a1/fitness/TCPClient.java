@@ -15,6 +15,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import a1.fitness.Member;
+import java.util.regex.Pattern;
 
 public class TCPClient {
     private static final String SERVER_ADDRESS = "localhost";
@@ -30,18 +31,62 @@ public class TCPClient {
         
         Scanner scanner = new Scanner(System.in);
         int maxBufferSize = 1024;
+        Pattern numericPattern = Pattern.compile("\\d+");
         
         while(true){
             //ask user to enter details for members
-            System.out.println("Enter your First Name:");
-            String firstName = scanner.nextLine();
-            System.out.println("Enter your Last Name:");
-            String lastName = scanner.nextLine();            
-            System.out.println("Enter your Address:");
-            String address = scanner.nextLine();
-            System.out.println("Enter your Phone Number:");
-            String phone = scanner.nextLine();      
+//            System.out.println("Enter your First Name:");
+//            String firstName = scanner.nextLine();
+            String firstName;
+            //validate first name is entered
+            do {
+                System.out.println("Enter your First Name:");
+                firstName = scanner.nextLine();
+                if (firstName == null || firstName.trim().isEmpty()) {
+                    System.out.println("Error - empty input: Please enter valid input for first name.");
+                }
+            } while (firstName == null || firstName.trim().isEmpty());
+          
             
+//            System.out.println("Enter your Last Name:");
+//            String lastName = scanner.nextLine();     
+            String lastName;
+            //validate last name is entered
+            do {
+                System.out.println("Enter your Last Name:");
+                lastName = scanner.nextLine();   
+                if (lastName == null || lastName.trim().isEmpty()) {
+                    System.out.println("Error - empty input: Please enter valid input for last name.");
+                }
+            } while (lastName == null || lastName.trim().isEmpty());            
+            
+//            System.out.println("Enter your Address:");
+//            String address = scanner.nextLine();
+            String address;
+            //validate last name is entered
+            do {
+                System.out.println("Enter your Address:");
+                address = scanner.nextLine();
+                if (address == null || address.trim().isEmpty()) {
+                    System.out.println("Error - empty input: Please enter valid input for address.");
+                }
+            } while (address == null || address.trim().isEmpty());                  
+            
+//            System.out.println("Enter your Phone Number:");
+//            String phone = scanner.nextLine();      
+            String phone;
+            //validate phone number is entered
+            //validate phon number is 10 digit nubmer
+            do {
+                System.out.println("Enter your Phone Number:");
+                phone = scanner.nextLine();
+                if (phone == null || phone.trim().isEmpty()) {
+                    System.out.println("Error - empty input: Please enter valid input for phone number");
+                } else if (!numericPattern.matcher(phone).matches() || phone.length() != 10) {
+                    System.out.println("Error - invalid input: Please enter 10 digit numbers for phone number.");
+                }
+            } while (phone == null || phone.trim().isEmpty() || !numericPattern.matcher(phone).matches() || phone.length() != 10);
+
             Member member = new Member(firstName, lastName, address, phone);
             String msg = "Sending Data to Server................\n" + firstName + ":" +  lastName +  ":" +  address +  ":" +  phone; 
             System.out.println(msg);

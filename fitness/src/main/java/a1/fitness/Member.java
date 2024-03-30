@@ -21,7 +21,6 @@ public class Member implements Serializable{
     private String address;
     private String phone;
 
-
     //constructor
     public Member(String firstName, String lastName, String address, String phone) {
         this.firstName = firstName;
