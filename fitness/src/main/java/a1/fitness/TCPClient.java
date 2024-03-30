@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 public class TCPClient {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int PORT_NO = 1142;
+    private static int memberNo = 1;
 
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket(SERVER_ADDRESS, PORT_NO);

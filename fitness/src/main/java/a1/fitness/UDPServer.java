@@ -57,12 +57,18 @@ public class UDPServer {
 //                   System.out.println("Last name :"  + member.getLastName());
 //                   System.out.println("Address size :"  + member.getAddress());
 //                   System.out.println("Phone :"  + member.getPhone());
-                   if ( i > 1 ) {
-                       returnDetails +=  "\n|" + member.getFirstName() + "       |" + member.getLastName()+ "     |"  +  member.getAddress()+ "     |"  + member.getPhone()+"     |";
-                   } else {
-                       returnDetails +=  "|"+ member.getFirstName()+ "       |"  + member.getLastName() + "     |" +  member.getAddress() + "     |" + member.getPhone()+"     |";
-                   }
-                   
+//                   if ( i > 1 ) {
+//                       returnDetails +=  "\n|" + member.getFirstName() + "       |" + member.getLastName()+ "     |"  +  member.getAddress()+ "     |"  + member.getPhone()+"     |";
+//                   } else {
+//                       returnDetails +=  "|"+ member.getFirstName()+ "       |"  + member.getLastName() + "     |" +  member.getAddress() + "     |" + member.getPhone()+"     |";
+//                   }
+                    if (i > 1) {
+                        returnDetails += String.format("\n| %-13s | %-13s | %-20s | %-12s |",
+                            member.getFirstName(), member.getLastName(), member.getAddress(), member.getPhone());
+                    } else {
+                        returnDetails += String.format("| %-13s | %-13s | %-20s | %-12s |",
+                            member.getFirstName(), member.getLastName(), member.getAddress(), member.getPhone());
+                    }                       
                    i++;
                 } while (member.getFirstName() != null);
              } catch (IOException e) {

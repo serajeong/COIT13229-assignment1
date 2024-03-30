@@ -40,8 +40,8 @@ public class UDPClient {
             String response = new String(responsePacket.getData(), 0, responsePacket.getLength());
             System.out.println("Server Response:");
             //display member details in table format
-            System.out.println("|First Name  |Last Name  |Address       |Phone Number  |");
-            System.out.println("========================================================"); 
+            System.out.println("|First Name     |Last Name      |Address               |Phone Number  |");
+            System.out.println("========================================================================"); 
             System.out.println(response);
 
             serverSocket.close();
