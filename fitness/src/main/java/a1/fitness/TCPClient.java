@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class TCPClient {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int PORT_NO = 1142;
-    private static int memberNo = 1;
+    private static int mCounter = 1; //member number starting from 1
 
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket(SERVER_ADDRESS, PORT_NO);
@@ -35,6 +35,9 @@ public class TCPClient {
         Pattern numericPattern = Pattern.compile("\\d+");
         
         while(true){
+            //member number incrementally generated
+            int mNumber = mCounter++;
+            System.out.println("Enter Detail for Member Number: " + mNumber);
             //ask user to enter details for members
 //            System.out.println("Enter your First Name:");
 //            String firstName = scanner.nextLine();
@@ -107,7 +110,7 @@ public class TCPClient {
             System.out.println("Server response: " + feedback);
             
             //ask member if they want to add more member
-            System.out.println("Would you like to enter more member details? Please type 'no' to exit, otherwise it will continue.");
+            System.out.println("Would you like to enter more member details? You can press 'Enter' key to continue. \n!IMPORTANT! Please type 'no' to exit, otherwise it will continue.");
             String endFlag = scanner.nextLine();
             
             //only break if user decides to exit by typing 'no' as prompted in message

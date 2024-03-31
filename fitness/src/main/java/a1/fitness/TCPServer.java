@@ -22,6 +22,7 @@ public class TCPServer {
     private static final int PORT_NO = 1142;
     private static final String FILE_MEMBER_LIST = "memberlist.txt";
     private static final String FILE_MEMBER_OBJECT = "memberlistObject";
+    private static int mCounter = 1; //member number starting from 1
 
     public static void main(String[] args) throws IOException {
        
@@ -58,7 +59,7 @@ public class TCPServer {
 
             //create a server socket
             ServerSocket serverSocket = new ServerSocket(PORT_NO);
-            System.out.println("Receiving data from client: ");
+            System.out.println("TCPServer is running on port " + PORT_NO);
 
             Socket socket = serverSocket.accept();
 //            System.out.println("Client connected: " + socket);
@@ -69,6 +70,8 @@ public class TCPServer {
             DataOutputStream dos = new DataOutputStream(out);
 
                 while(true) {
+//                    int mNumber = mCounter++;
+//                    System.out.println("Receiving data from client: " + mNumber);
                     InputStream is = socket.getInputStream();
                     byte[] bytes = new byte[1024];
 
@@ -80,7 +83,9 @@ public class TCPServer {
 
 //                        //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
 //                        System.out.println("Received data from Client");
-
+                        int mNumber = mCounter++;
+                        System.out.println("Receiving data from client: " + mNumber);
+                    
                         Member receiveMember = toObject(bytes, Member.class);
                         saveMemberList(receiveMember);
                         sendData(bytes, socket);
