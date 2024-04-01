@@ -42,6 +42,7 @@ public class UDPServer {
              try {
                 do  {
                   member = (Member) objectInputStream.readObject();
+                    //padding applied to display in table format as required
                     if (i > 1) {
                         returnDetails += String.format("\n| %-13s | %-13s | %-20s | %-12s |",
                             member.getFirstName(), member.getLastName(), member.getAddress(), member.getPhone());
