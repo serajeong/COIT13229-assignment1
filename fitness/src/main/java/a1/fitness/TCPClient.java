@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 public class TCPClient {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int PORT_NO = 1142;
-    private static int mCounter = 1; //member number starting from 1
 
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket(SERVER_ADDRESS, PORT_NO);
@@ -34,56 +33,49 @@ public class TCPClient {
         int maxBufferSize = 1024;
         Pattern numericPattern = Pattern.compile("\\d+");
         
+        int mCounter = 1; //member number starting from 1        
         while(true){
             //member number incrementally generated
             int mNumber = mCounter++;
             System.out.println("Enter Detail for Member Number: " + mNumber);
+            
             //ask user to enter details for members
-//            System.out.println("Enter your First Name:");
-//            String firstName = scanner.nextLine();
-            String firstName;
-            //validate first name is entered
+            String firstName = "";
             do {
                 System.out.println("Enter your First Name:");
                 firstName = scanner.nextLine();
+                //validate first name is entered
                 if (firstName == null || firstName.trim().isEmpty()) {
                     System.out.println("Error - empty input: Please enter valid input for first name.");
                 }
             } while (firstName == null || firstName.trim().isEmpty());
           
-            
-//            System.out.println("Enter your Last Name:");
-//            String lastName = scanner.nextLine();     
-            String lastName;
-            //validate last name is entered
+            String lastName = "";
             do {
                 System.out.println("Enter your Last Name:");
                 lastName = scanner.nextLine();   
+                //validate last name is entered
                 if (lastName == null || lastName.trim().isEmpty()) {
                     System.out.println("Error - empty input: Please enter valid input for last name.");
                 }
             } while (lastName == null || lastName.trim().isEmpty());            
             
-//            System.out.println("Enter your Address:");
-//            String address = scanner.nextLine();
-            String address;
-            //validate last name is entered
+            String address = "";
             do {
                 System.out.println("Enter your Address:");
                 address = scanner.nextLine();
+                //validate address is entered
                 if (address == null || address.trim().isEmpty()) {
                     System.out.println("Error - empty input: Please enter valid input for address.");
                 }
             } while (address == null || address.trim().isEmpty());                  
             
-//            System.out.println("Enter your Phone Number:");
-//            String phone = scanner.nextLine();      
-            String phone;
-            //validate phone number is entered
-            //validate phon number is 10 digit nubmer
+            String phone = "";
             do {
                 System.out.println("Enter your Phone Number:");
                 phone = scanner.nextLine();
+                //validate phone number is entered
+                //validate phon number is 10 digit nubmer
                 if (phone == null || phone.trim().isEmpty()) {
                     System.out.println("Error - empty input: Please enter valid input for phone number");
                 } else if (!numericPattern.matcher(phone).matches() || phone.length() != 10) {
@@ -96,8 +88,6 @@ public class TCPClient {
             System.out.println(msg);
 
             byte[] data = toByteArray(member);
-//            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
-//            System.out.println("data " + data);
             
             dos.write(data);
             dos.flush();

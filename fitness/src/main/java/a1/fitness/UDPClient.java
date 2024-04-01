@@ -29,8 +29,6 @@ public class UDPClient {
             DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length, InetAddress.getByName(SERVER_ADDRESS), PORT_NO);
 
             serverSocket.send(requestPacket);
-//            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING            
-//            System.out.println("Request sent to server.");
 
             //receive response from server
             byte[] responseData = new byte[1024];

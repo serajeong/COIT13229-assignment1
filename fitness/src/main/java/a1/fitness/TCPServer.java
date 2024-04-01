@@ -22,7 +22,6 @@ public class TCPServer {
     private static final int PORT_NO = 1142;
     private static final String FILE_MEMBER_LIST = "memberlist.txt";
     private static final String FILE_MEMBER_OBJECT = "memberlistObject";
-    private static int mCounter = 1; //member number starting from 1
 
     public static void main(String[] args) throws IOException {
        
@@ -32,77 +31,50 @@ public class TCPServer {
                 if (new File(FILE_MEMBER_LIST).exists()){
                 saveMemberObject();                    
                 }
+            }
+        };
+        Timer timer = new Timer("Timer");
+        long delay = 0;
+        long period = 2000; //every 2 seconds as required
+        timer.scheduleAtFixedRate(task, delay, period);
 
-//                byte[] byteFile = null;
-//                try{
-//                    File file1 = new File(FILE_MEMBER_LIST);
-//                    
-//                    //server converts memberlist to memberobject if memberlist file exists
-//                    if (file1.exists()){
-//                        byteFile = Files.readAllBytes(file1.toPath());
-//                        
-//                            //TESTING with 'false' which rewrites object file every 2 seconds instead of 'true' that appends
-//                            try(FileOutputStream fos = new FileOutputStream(FILE_MEMBER_OBJECT,false)){
-//                                fos.write(byteFile);
-//                            }catch(IOException e){
-//                            }   
-//                        }
-//                    } catch (IOException e1){
-//                        e1.printStackTrace();
-//                    }
-                }
-            };
-            Timer timer = new Timer("Timer");
-            long delay = 0;
-            long period = 2000; //every 2 seconds as required
-            timer.scheduleAtFixedRate(task, delay, period);
+        //create a server socket
+        ServerSocket serverSocket = new ServerSocket(PORT_NO);
+        System.out.println("TCPServer is running on port " + PORT_NO);
 
-            //create a server socket
-            ServerSocket serverSocket = new ServerSocket(PORT_NO);
-            System.out.println("TCPServer is running on port " + PORT_NO);
+        Socket socket = serverSocket.accept();
 
-            Socket socket = serverSocket.accept();
-//            System.out.println("Client connected: " + socket);
+        InputStream in = socket.getInputStream();
+        DataInputStream dis = new DataInputStream(in);
+        OutputStream out = socket.getOutputStream();
+        DataOutputStream dos = new DataOutputStream(out);
 
-            InputStream in = socket.getInputStream();
-            DataInputStream dis = new DataInputStream(in);
-            OutputStream out = socket.getOutputStream();
-            DataOutputStream dos = new DataOutputStream(out);
+        int mCounter = 1; //member number starting from 1
+        while(true) {
+            InputStream is = socket.getInputStream();
+            byte[] bytes = new byte[1024];
+            int readByteCount = is.read(bytes);
 
-                while(true) {
-//                    int mNumber = mCounter++;
-//                    System.out.println("Receiving data from client: " + mNumber);
-                    InputStream is = socket.getInputStream();
-                    byte[] bytes = new byte[1024];
+            if (readByteCount > 0){
+                int mNumber = mCounter++;
+                System.out.println("Receiving data from client: " + mNumber);
 
-                    int readByteCount = is.read(bytes);
-//                    //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
-//                    System.out.println("readByteCount" + readByteCount);
-
-                    if (readByteCount > 0){
-
-//                        //FOR TESTING ONLY - DELETE BEFORE SUBMITTING
-//                        System.out.println("Received data from Client");
-                        int mNumber = mCounter++;
-                        System.out.println("Receiving data from client: " + mNumber);
-                    
-                        Member receiveMember = toObject(bytes, Member.class);
-                        saveMemberList(receiveMember);
-                        sendData(bytes, socket);
-                    } else {
-                        //closing
-                        in.close();
-                        out.close();
-                        socket.close();
-                        serverSocket.close();
-                        break;
-                    }
-                    //send feedback to client
-                    dos.writeUTF("Save Data of the member number:");
-                }
-    }
-    
-//    Thread thread = new Thread(new Runnable(){            
+                Member receiveMember = toObject(bytes, Member.class);
+                saveMemberList(receiveMember);
+                sendData(bytes, socket);
+            } else {
+                //closing
+                in.close();
+                out.close();
+                socket.close();
+                serverSocket.close();
+                break;
+            }
+            //send feedback to client
+            dos.writeUTF("Save Data of the member number:");
+        }
+}
+           
     //save member details as text file
     private static void saveMemberList(Member member) {
         try (FileOutputStream fos = new FileOutputStream(FILE_MEMBER_LIST, true)) {

@@ -25,26 +25,15 @@ public class UDPServer {
             System.out.println("UDPServer is running on port " + PORT_NO);
             
             byte[] buffer = new byte[1024];
-
+            
             DatagramPacket requestPacket = new DatagramPacket(buffer, buffer.length);
-
             socket.receive(requestPacket);
-//            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING            
-//            System.out.println("Request received from client.");
-
-            String request = new String(requestPacket.getData(), 0, requestPacket.getLength());
-            //FOR TESTING ONLY - CHANGE MESSAGE BEFORE SUBMITTING            
+            String request = new String(requestPacket.getData(), 0, requestPacket.getLength());       
             System.out.println("Client Request: " + request);
 
             //read object file that TCPServer created
              FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-//             ArrayList<Member> memberList  = (ArrayList<Member>) objectInputStream.readObject();            
-//             Member member = (Member) objectInputStream.readObject();
-//             System.out.println("First name :"  + member.getFirstName());
-//             System.out.println("Last name :"  + member.getLastName());
-//             System.out.println("Address size :"  + member.getAddress());
-//             System.out.println("Phone :"  + member.getPhone());
             
             //do while loop that will convert member object back to string
              Member member = null;
@@ -53,15 +42,6 @@ public class UDPServer {
              try {
                 do  {
                   member = (Member) objectInputStream.readObject();
-//                   System.out.println("First name :"  + member.getFirstName());
-//                   System.out.println("Last name :"  + member.getLastName());
-//                   System.out.println("Address size :"  + member.getAddress());
-//                   System.out.println("Phone :"  + member.getPhone());
-//                   if ( i > 1 ) {
-//                       returnDetails +=  "\n|" + member.getFirstName() + "       |" + member.getLastName()+ "     |"  +  member.getAddress()+ "     |"  + member.getPhone()+"     |";
-//                   } else {
-//                       returnDetails +=  "|"+ member.getFirstName()+ "       |"  + member.getLastName() + "     |" +  member.getAddress() + "     |" + member.getPhone()+"     |";
-//                   }
                     if (i > 1) {
                         returnDetails += String.format("\n| %-13s | %-13s | %-20s | %-12s |",
                             member.getFirstName(), member.getLastName(), member.getAddress(), member.getPhone());
@@ -76,10 +56,7 @@ public class UDPServer {
              }
              objectInputStream.close();
 
-//            //FOR TESTING ONLY - DELETE BEFORE SUBMITTING             
-//           System.out.println("returnRow :"  + returnRow);
             //send response to client 
-//             String responseMessage = "Object file read successfully [" + returnRow +"]";
              byte[] responseData = returnDetails.getBytes();
              InetAddress clientAddress = requestPacket.getAddress();
              int clientPort = requestPacket.getPort();
